@@ -1,0 +1,288 @@
+<head>
+<link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
+<script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.8/vue.min.js"></script>
+<meta charset="UTF-8">
+<style>
+.panel-body{
+	text-align: left;
+}
+.panel-heading:hover{
+	cursor: pointer;
+}
+.panel-title{
+	text-align: left;
+}
+.danger{
+	background: red;
+}
+.spinner {
+  margin: 100px auto;
+  width: 300px;
+  height: 120px;
+  text-align: center;
+  font-size: 40px;
+}
+ 
+.spinner > div {
+  background-color: pink;
+  height: 100%;
+  width: 6px;
+  display: inline-block;
+   
+  -webkit-animation: stretchdelay 1.2s infinite ease-in-out;
+  animation: stretchdelay 1.2s infinite ease-in-out;
+}
+ 
+.spinner .rect2 {
+  -webkit-animation-delay: -1.1s;
+  animation-delay: -1.1s;
+}
+ 
+.spinner .rect3 {
+  -webkit-animation-delay: -1.0s;
+  animation-delay: -1.0s;
+}
+ 
+.spinner .rect4 {
+  -webkit-animation-delay: -0.9s;
+  animation-delay: -0.9s;
+}
+ 
+.spinner .rect5 {
+  -webkit-animation-delay: -0.8s;
+  animation-delay: -0.8s;
+}
+.spinner .rect6 {
+  -webkit-animation-delay: -0.7s;
+  animation-delay: -0.7s;
+}
+ 
+@-webkit-keyframes stretchdelay {
+  0%, 40%, 100% { -webkit-transform: scaleY(0.4) } 
+  20% { -webkit-transform: scaleY(1.0) }
+}
+ 
+@keyframes stretchdelay {
+  0%, 40%, 100% {
+    transform: scaleY(0.4);
+    -webkit-transform: scaleY(0.4);
+  }  20% {
+    transform: scaleY(1.0);
+    -webkit-transform: scaleY(1.0);
+  }
+}
+</style>
+</head>
+<body>
+
+<center>
+<div class="spinner" id="spin" style="display:none">
+  <div class="rect1"></div>
+  <div class="rect2"></div>
+  <div class="rect3"></div>
+  <div class="rect4"></div>
+  <div class="rect5"></div>
+  <div class="rect6"></div>
+</div>
+<div class="container" id="mainbody">
+<div class="row" >
+<div class="col-lg-3" id="nodeList">
+	<div class="panel panel-primary" v-for="(value, index) in nodeInfo">
+    <div class="panel-heading" data-toggle="collapse" v-bind:data-target="'#' + value.name">
+        <h3 class="panel-title">
+            {{ value.name }}
+        </h3>
+    </div>
+    <div class="panel-body collapse" v-bind:id="value.name">
+        <p>接口地址：{{ value.url }}</p>
+		<p>接口版本：{{ value.version }}</p>
+		<p>总容器数：{{ value.allContainers }}</p>
+		<p v-if="value.runningContainers !== 'UnKown'">运行容器数：{{ value.runningContainers }}</p>
+		<button class="btn btn-primary" v-on:click="getContainersDetails(index)">详情</button>
+    </div>
+	</div>
+</div>
+<div class="col-lg-9" id="containerList">
+<div>
+<div v-for="(value, index) in containersInfo" class="panel panel-success">
+    <div class="panel-heading" data-toggle="collapse" v-bind:data-target="'#container' + value.id">
+        <h3 class="panel-title">
+            <big>{{ value.status }}: {{ value.name }}</big> - {{ value.nodename }}
+        </h3>
+    </div>
+    <div class="panel-body collapse" v-bind:id="'container' + value.id">
+        <p>名称： {{ value.name }}</p>
+		<p>状态： {{ value.status }}</p>
+		<p>镜像： {{ value.image }}</p>
+		<p>创建时间： {{ value.ctime }}</p>
+		<p>启动时间： {{ value.starttime }}</p>
+		<p>内存使用： {{ value.memuse }}MByte</p>
+		<p>内存百分比： {{ value.mempercent }}%</p>
+		<div class="btn-group">
+			<button class="btn btn-success" v-bind:class="{ disabled: value.startDisable }" v-on:click="containerAction(index,'start')">启动</button>
+			<button class="btn btn-primary" v-bind:class="{ disabled: value.stopDisable }" v-on:click="containerAction(index,'stop')">停止</button>
+			<button class="btn btn-warning" v-bind:class="{ disabled: value.restartDisable }" v-on:click="containerAction(index,'restart')">重启</button>
+			<button class="btn btn-danger" v-bind:class="{ disabled: value.delDisable }" v-on:click="containerAction(index,'remove')">删除</button>
+		</div>
+			<button class="btn btn-default" v-on:click="containerRefresh(index)">刷新</button>
+    </div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</center>
+<script>
+function startload(){
+	document.getElementById('spin').style.display='block'
+	document.getElementById('mainbody').style.display='none'
+}
+function stopload(){
+	document.getElementById('spin').style.display='none'
+	document.getElementById('mainbody').style.display='block'
+}
+var BASEAPI=""
+</script>
+<script>
+nodeV = new Vue({
+	el: "#nodeList",
+	data:{
+		nodeInfo: [
+			
+		],
+	},
+	methods: {
+		newMsg: function(index){
+			//bootbox.alert(this.nodeInfo);
+			alert(this.nodeInfo[index].name);
+			//console.log(this.nodeInfo[index].name);
+		},
+		getContainersDetails(index){
+			nodename = this.nodeInfo[index].name;
+			startload();
+			$.ajax({
+				url: BASEAPI+"/docker/container/detail",
+				type:"POST",
+				data:{
+					nodename: nodename,
+				},
+				success:function(resJson){
+					res = JSON.parse(resJson)["info"];
+					containersV.containersInfo=[];
+					for (i in res){
+						var container = {};
+						container["name"]=res[i]["name"];
+						container["nodename"]=nodename;
+						container["status"]=res[i]["detail"]["State"]["Status"].toUpperCase();
+						if(container["status"] == "RUNNING"){
+							container["startDisable"] = true;
+							container["stopDisable"] = false;
+							container["restartDisable"] = false;
+							container["delDisable"] = true;
+						}
+						else{
+							container["startDisable"] = false;
+							container["stopDisable"] = true;
+							container["restartDisable"] = true;
+							container["delDisable"] = false;
+						}
+						container["id"]=res[i]["detail"]["Id"];
+						container["image"]=res[i]["detail"]["Config"]["Image"];
+						container["ctime"]=res[i]["detail"]["Created"];
+						container["starttime"]=res[i]["detail"]["State"]["StartedAt"];
+						container["memuse"]=(res[i]["stats"]["memory_stats"]["usage"]/1024/1024).toFixed(2);
+						container["mempercent"]=(res[i]["stats"]["memory_stats"]["usage"]/res[i]["stats"]["memory_stats"]["limit"]*100).toFixed(2);
+						containersV.containersInfo.push(container);
+						stopload()
+					}
+				}
+			})
+		
+		}
+	}
+})
+containersV = new Vue({
+	el: "#containerList",
+	data:{
+		containersInfo: [
+			{"name":"container1","nodename":"node1","notRunning":false,"notRunning":true},
+		],
+		controlURL: BASEAPI+"/container/",
+	},
+	methods: {
+		containerAction: function(index,action){
+			nodename = this.containersInfo[index].nodename;
+			containername = this.containersInfo[index].name;
+			url = this.controlURL+nodename+"/"+containername+"/"+action+"/";
+			startload();
+			$.ajax({
+				url: url,
+				type:"POST",
+				success:function(resJSON){
+					containersV.containerRefresh(index);
+					stopload();	
+				}
+			})
+		},
+		containerRefresh: function(index){
+			odename = this.containersInfo[index].nodename;
+			containername = this.containersInfo[index].name;
+			url = this.controlURL+nodename+"/"+containername+"/detail/";
+			$.ajax({
+				url: url,
+				type:"POST",
+				success:function(resJSON){
+					if(JSON.parse(resJSON)["status"]==0)
+					{
+						res = JSON.parse(resJSON)["info"];
+						//console.log(res["State"]["Status"].toUpperCase());
+						containersV.containersInfo[index].status = res["detail"]["State"]["Status"].toUpperCase();
+						containersV.containersInfo[index].starttime = res["detail"]["State"]["StartedAt"];
+						containersV.containersInfo[index].memuse = (res["stats"]["memory_stats"]["usage"]/1024/1024).toFixed(2);
+						containersV.containersInfo[index].mempercent = (res["stats"]["memory_stats"]["usage"]/res["stats"]["memory_stats"]["limit"]*100).toFixed(2);
+						if(containersV.containersInfo[index].status == "RUNNING"){
+							containersV.containersInfo[index]["startDisable"] = true;
+							containersV.containersInfo[index]["stopDisable"] = false;
+							containersV.containersInfo[index]["restartDisable"] = false;
+							containersV.containersInfo[index]["delDisable"] = true;
+						}
+						else{
+							containersV.containersInfo[index]["startDisable"] = false;
+							containersV.containersInfo[index]["stopDisable"] = true;
+							containersV.containersInfo[index]["restartDisable"] = true;
+							containersV.containersInfo[index]["delDisable"] = false;
+						}
+					}
+				}
+			})
+		}
+	}
+})
+	$.ajax({
+		url: BASEAPI+"/docker/list",
+		type:"POST",
+		success:function(resJSON){
+			res = JSON.parse(resJSON);
+			for (i in res){
+				var node = {};
+				node['name'] = res[i]['name'];
+				node['url'] = res[i]['url'];
+				node['version'] = res[i]['api-version'];
+				node['allContainers'] = res[i]['info']['Containers'];
+				if (res[i]["info"].hasOwnProperty("ContainersRunning") == true)
+				{
+					node['runningContainers'] = res[i]["info"]["ContainersRunning"];
+				}
+				else{
+					node['runningContainers'] = "UnKown";
+				}
+				nodeV.nodeInfo.push(node);
+			}
+        },
+	})
+</script>
+</body>
