@@ -97,11 +97,14 @@
         </h3>
     </div>
     <div class="panel-body collapse" v-bind:id="value.name">
-        <p>接口地址：{{ value.url }}</p>
+        	<p>接口地址：{{ value.url }}</p>
 		<p>接口版本：{{ value.version }}</p>
-		<p>总容器数：{{ value.allContainers }}</p>
-		<p v-if="value.runningContainers !== 'UnKown'">运行容器数：{{ value.runningContainers }}</p>
-		<button class="btn btn-primary" v-on:click="getContainersDetails(index)">详情</button>
+		<p>状态: {{ value.status }}</p>
+		<div v-if="value.status == 'Running'">
+			<p>总容器数：{{ value.allContainers }}</p>
+			<p v-if="value.runningContainers !== 'UnKown'">运行容器数：{{ value.runningContainers }}</p>
+			<button class="btn btn-primary" v-on:click="getContainersDetails(index)">详情</button>
+		</div>
     </div>
 	</div>
 </div>
@@ -273,6 +276,7 @@ containersV = new Vue({
 				node['url'] = res[i]['url'];
 				node['version'] = res[i]['api-version'];
 				node['allContainers'] = res[i]['info']['Containers'];
+				node['status'] = res[i]['status'];
 				if (res[i]["info"].hasOwnProperty("ContainersRunning") == true)
 				{
 					node['runningContainers'] = res[i]["info"]["ContainersRunning"];

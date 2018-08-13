@@ -13,11 +13,17 @@ def list(request):
 		nodeinfo['name']=i['name'];
 		nodeinfo['url']=i["url"];
 		nodeinfo['api-version']=i["version"];
-		nodeinfo["info"]=node.client.info();
+		try:
+			nodeinfo["info"] = node.client.info();
+			nodeinfo["status"] = "Running";
+		except:
+			nodeinfo["info"] = 0;
+			nodeinfo["status"] = "Disconnect";
 		relist.append(nodeinfo);
 	response = HttpResponse(json.dumps(relist));	
 	response["Access-Control-Allow-Origin"] = "*";
 	return response;
+
 def getDetailsList(request):
 	redict = {};
 	nodename=request.POST['nodename'].encode("utf-8");
