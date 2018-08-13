@@ -159,11 +159,6 @@ nodeV = new Vue({
 		],
 	},
 	methods: {
-		newMsg: function(index){
-			//bootbox.alert(this.nodeInfo);
-			alert(this.nodeInfo[index].name);
-			//console.log(this.nodeInfo[index].name);
-		},
 		getContainersDetails(index){
 			nodename = this.nodeInfo[index].name;
 			startload();
@@ -286,6 +281,7 @@ containersV = new Vue({
 				}
 				nodeV.nodeInfo.push(node);
 			}
+			nodeV.getContainersDetails(0);
         },
 	})
 </script>
