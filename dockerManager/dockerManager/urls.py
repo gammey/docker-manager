@@ -16,9 +16,11 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 from dockerManager.lib import views as docker_views
+from dockerManager import views as views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^docker/list$', docker_views.list),
     url(r'^docker/container/detail$', docker_views.getDetailsList),
     url(r'^container/(\S+)/(\S+)/(\S+)/$', docker_views.containerControl),
+    url(r'^$', views.index),
 ]
