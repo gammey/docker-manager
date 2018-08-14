@@ -25,7 +25,6 @@
 var vArr = [imageV,containersV];
 function showV(varr,vobj){
         for (i in varr){
-                console.log(varr[i]);
                 varr[i].seen = false;
                 }
         vobj.seen = true;

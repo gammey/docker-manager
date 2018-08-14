@@ -21,7 +21,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^docker/list$', docker_views.nodelist),
     url(r'^docker/container/detail$', docker_views.containerDetailsList),
-    url(r'^docker/images/detail$', docker_views.imagesDetailsList),
+    url(r'^docker/image/detail$', docker_views.imagesDetailsList),
     url(r'^container/(\S+)/(\S+)/(\S+)/$', docker_views.containerControl),
     url(r'^$', views.index),
 ]

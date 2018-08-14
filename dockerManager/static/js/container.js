@@ -7,9 +7,6 @@ function stopload(){
 	document.getElementById('mainbody').style.display='block'
 }
 var BASEAPI=""
-//var nodeV;
-var imageV;
-var containersV;
 nodeV = new Vue({
 	el: "#nodeList",
 	data:{
@@ -20,15 +17,46 @@ nodeV = new Vue({
 	methods: {
 		getImageDetails: function(index){
                 	showV(vArr,imageV);
-                	//imageV.seen = true;
-			//containersV.seen = false;
+			nodename = this.nodeInfo[index].name;
+			startload();
+			$.ajax({
+				url: BASEAPI+"/docker/image/detail",
+				type: "POST",
+				data: {	nodename: nodename,	},
+				success: function(resJson){
+					res = JSON.parse(resJson)["info"];
+					imageV.imageInfo = [];
+					for (i in res)
+					{
+						var image = {};
+						if ( res[i]["Id"].indexOf(":") > 0 )
+						{
+							image["id"] = res[i]["Id"].split(":")[1];
+						}
+						else
+						{
+							image["id"] = res[i]["Id"];
+						}
+						console.log(image["id"]);
+						if ( res[i]["RepoTags"].length > 0)
+						{
+							image["name"] = res[i]["RepoTags"][0];
+						}
+						else
+						{
+							image["name"] = image["id"];
+						}
+						imageV.imageInfo.push(image);
+					}
+					stopload();
+				}	
+
+			})
 		},
 		getContainersDetails(index,refresh=true){
 			if (refresh == true){
 				showV(vArr,containersV);
 			}
-			//imageV.seen = false;
-                        //containersV.seen = true;
 			nodename = this.nodeInfo[index].name;
 			startload();
 			$.ajax({
