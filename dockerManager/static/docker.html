@@ -188,6 +188,12 @@ nodeV = new Vue({
 							container["restartDisable"] = true;
 							container["delDisable"] = false;
 						}
+						if ( container["name"] == "docker-manager")
+						{
+							container["stopDisable"] = true;
+                                                        container["restartDisable"] = true;
+
+						}
 						container["id"]=res[i]["detail"]["Id"];
 						container["image"]=res[i]["detail"]["Config"]["Image"];
 						container["ctime"]=res[i]["detail"]["Created"];
