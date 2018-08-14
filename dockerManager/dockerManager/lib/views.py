@@ -5,7 +5,7 @@ import docker
 import gaDocker
 import json
 
-def list(request):
+def nodelist(request):
 	relist=[];
 	for i in DockerList:
 		node = gaDocker.dockerNode(i["url"],i["version"]);
@@ -21,10 +21,10 @@ def list(request):
 			nodeinfo["status"] = "Disconnect";
 		relist.append(nodeinfo);
 	response = HttpResponse(json.dumps(relist));	
-	response["Access-Control-Allow-Origin"] = "*";
+	#response["Access-Control-Allow-Origin"] = "*";
 	return response;
 
-def getDetailsList(request):
+def containerDetailsList(request):
 	redict = {};
 	nodename=request.POST['nodename'].encode("utf-8");
 	nodeSim = {};
@@ -39,9 +39,24 @@ def getDetailsList(request):
 	redict["info"] = node.allContainerDetails();
 	redict["status"] = 0;
 	response = HttpResponse(json.dumps(redict));
-        response["Access-Control-Allow-Origin"] = "*";
+        #response["Access-Control-Allow-Origin"] = "*";
 	return response;
 	
+def imagesDetailsList(request):
+	redict = {};
+        nodename=request.POST['nodename'].encode("utf-8");
+	for i in DockerList:
+                if i["name"] == nodename:
+                        nodeSim = i;
+        if nodeSim.has_key("name") == False:
+                redict["status"] = -1;
+                redict["info"] = "UnKown nodename."
+                return HttpResponse(json.dumps(redict));
+        node = gaDocker.dockerNode(nodeSim["url"],nodeSim["version"]);
+	redict["info"] = node.listImages();
+        redict["status"] = 0;
+	response = HttpResponse(json.dumps(redict));
+	return response;	
 def containerControl(request,nodename,containername,action):
 	redict = {};
 	node = gaDocker.searchNode(gaDocker.dockerlist,nodename);
@@ -79,6 +94,6 @@ def containerControl(request,nodename,containername,action):
 		redict["status"]=-1;
                 redict["info"]="Unkown NodeName:"+nodename;
 	response = HttpResponse(json.dumps(redict));
-        response["Access-Control-Allow-Origin"] = "*";
+        #response["Access-Control-Allow-Origin"] = "*";
         return response;
 		

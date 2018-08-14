@@ -97,6 +97,13 @@ class dockerNode:
                         redict["stats"] = node.stats(decode=True,stream=False);
                         relist.append(redict);
                 return relist;
+	def listImages(self):
+		relist = [];
+		ilist = self.client.images.list();
+		for i in ilist:
+			detail = i.attrs;
+			relist.append(detail);
+		return relist;
 	def startContainer(self,name):
 		container = self.searchContainer(name);
 		if container != 0: 

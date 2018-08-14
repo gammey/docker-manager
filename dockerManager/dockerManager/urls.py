@@ -19,8 +19,9 @@ from dockerManager.lib import views as docker_views
 from dockerManager import views as views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^docker/list$', docker_views.list),
-    url(r'^docker/container/detail$', docker_views.getDetailsList),
+    url(r'^docker/list$', docker_views.nodelist),
+    url(r'^docker/container/detail$', docker_views.containerDetailsList),
+    url(r'^docker/images/detail$', docker_views.imagesDetailsList),
     url(r'^container/(\S+)/(\S+)/(\S+)/$', docker_views.containerControl),
     url(r'^$', views.index),
 ]
