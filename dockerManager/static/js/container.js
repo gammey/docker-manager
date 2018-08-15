@@ -37,15 +37,19 @@ nodeV = new Vue({
 						{
 							image["id"] = res[i]["Id"];
 						}
-						console.log(image["id"]);
+						//console.log(image["id"]);
 						if ( res[i]["RepoTags"].length > 0)
 						{
 							image["name"] = res[i]["RepoTags"][0];
+							image["version"] = res[i]["RepoTags"][0].split(":")[res[i]["RepoTags"][0].split(":").length-1];
 						}
 						else
 						{
 							image["name"] = image["id"];
+							image["version"] = "Unkown";
 						}
+						image["size"] = (res[i]["VirtualSize"]/1024/1024).toFixed(2);
+						image["createTime"] = res[i]["Created"];
 						imageV.imageInfo.push(image);
 					}
 					stopload();

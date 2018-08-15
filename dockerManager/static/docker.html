@@ -120,11 +120,14 @@
     <div class="panel-body collapse" v-bind:id="'container' + value.id">
         <p>名称： {{ value.name }}</p>
 		<p>状态： {{ value.status }}</p>
+		<p>资源ID：{{ value.id }}</p>
 		<p>镜像： {{ value.image }}</p>
 		<p>创建时间： {{ value.ctime }}</p>
-		<p>启动时间： {{ value.starttime }}</p>
-		<p>内存使用： {{ value.memuse }}MByte</p>
-		<p>内存百分比： {{ value.mempercent }}%</p>
+		<div v-if="value.status == 'RUNNING'">
+			<p>启动时间： {{ value.starttime }}</p>
+			<p>内存使用： {{ value.memuse }}MByte</p>
+			<p>内存百分比： {{ value.mempercent }}%</p>
+		</div>
 		<div class="btn-group">
 			<button class="btn btn-success" v-bind:class="{ disabled: value.startDisable }" v-on:click="containerAction(index,'start')">启动</button>
 			<button class="btn btn-primary" v-bind:class="{ disabled: value.stopDisable }" v-on:click="containerAction(index,'stop')">停止</button>
@@ -144,6 +147,9 @@
     </div>
     <div class="panel-body collapse" v-bind:id="'images' + value.id">
         <p>名称： {{ value.name }} </p>
+	<p v-if="value.version != 'Unkown'">版本：{{ value.version }}</p>
+	<p>容量：{{ value.size }}MByte</p>
+	<p>创建时间：{{ value.createTime }}</p>
     </div>
 </div> <!-- panel -->
 </div> <!-- imagelist -->
