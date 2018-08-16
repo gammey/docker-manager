@@ -150,6 +150,7 @@
 	<p v-if="value.version != 'Unkown'">版本：{{ value.version }}</p>
 	<p>容量：{{ value.size }}MByte</p>
 	<p>创建时间：{{ value.createTime }}</p>
+	<button class="btn btn-sm btn-danger" v-on:click="delImage(index)">删除</btn>
     </div>
 </div> <!-- panel -->
 </div> <!-- imagelist -->

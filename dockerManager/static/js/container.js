@@ -29,6 +29,7 @@ nodeV = new Vue({
 					for (i in res)
 					{
 						var image = {};
+						image["nodename"] = nodename;
 						if ( res[i]["Id"].indexOf(":") > 0 )
 						{
 							image["id"] = res[i]["Id"].split(":")[1];

@@ -96,4 +96,19 @@ def containerControl(request,nodename,containername,action):
 	response = HttpResponse(json.dumps(redict));
         #response["Access-Control-Allow-Origin"] = "*";
         return response;
-		
+
+def imageControl(request,nodename,imagename,action):
+	redict = {};
+        node = gaDocker.searchNode(gaDocker.dockerlist,nodename);
+	redict["status"]=0;
+        redict["info"]="Success";
+	if action == "delete":
+		res = node.delImage(imagename);
+		if res != 0:
+			redict["status"]=-1;
+                        redict["info"]=res;
+	else:
+		redict["status"]=-1;
+                redict["info"]="Unkown Action";
+	response = HttpResponse(json.dumps(redict));
+        return response;

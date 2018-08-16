@@ -104,6 +104,16 @@ class dockerNode:
 			detail = i.attrs;
 			relist.append(detail);
 		return relist;
+	def delImage(self,name):
+		try: 
+			im = self.client.images.get(name);
+		except:
+			return "Image not exsit";
+		try:
+			self.client.images.remove(name);
+			return 0;
+		except:
+			return "Remove Image Failed.";
 	def startContainer(self,name):
 		container = self.searchContainer(name);
 		if container != 0: 
