@@ -1,9 +1,8 @@
 <head>
 <link rel="stylesheet" href="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/css/bootstrap.min.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.4.0/bootbox.min.js"></script>
 <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.8/vue.min.js"></script>
+<script src="https://cdn.bootcss.com/vue/2.5.9/vue.min.js"></script>
 <meta charset="UTF-8">
 <style>
 .panel-body{
@@ -150,6 +149,7 @@
 	<p v-if="value.version != 'Unkown'">版本：{{ value.version }}</p>
 	<p>容量：{{ value.size }}MByte</p>
 	<p>创建时间：{{ value.createTime }}</p>
+	<button class="btn btn-sm btn-primary" v-on:click="historyImage(index)">历史详情</btn>
 	<button class="btn btn-sm btn-danger" v-on:click="delImage(index)">删除</btn>
     </div>
 </div> <!-- panel -->

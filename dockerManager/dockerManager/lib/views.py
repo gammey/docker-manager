@@ -107,6 +107,14 @@ def imageControl(request,nodename,imagename,action):
 		if res != 0:
 			redict["status"]=-1;
                         redict["info"]=res;
+	elif action == "history":
+		res = node.historyImage(imagename);
+                if res != "Error":
+                        redict["info"] = res;
+			redict["status"] = 0;
+                else:
+			redict["status"] = -1;
+			redict["info"] = "Error";
 	else:
 		redict["status"]=-1;
                 redict["info"]="Unkown Action";

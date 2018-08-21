@@ -114,6 +114,15 @@ class dockerNode:
 			return 0;
 		except:
 			return "Remove Image Failed.";
+	def historyImage(self,name):
+		try:
+                        im = self.client.images.get(name);
+                except:
+                        return "Error";
+                try:
+                        return self.client.images.get(name).history();
+                except:
+                        return "Error";
 	def startContainer(self,name):
 		container = self.searchContainer(name);
 		if container != 0: 
