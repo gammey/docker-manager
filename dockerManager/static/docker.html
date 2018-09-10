@@ -78,7 +78,7 @@
 <body>
 
 <center>
-<div class="spinner" id="spin" style="display:none">
+<div class="spinner" id="spin">
   <div class="rect1"></div>
   <div class="rect2"></div>
   <div class="rect3"></div>
@@ -86,7 +86,7 @@
   <div class="rect5"></div>
   <div class="rect6"></div>
 </div>
-<div class="container" id="mainbody">
+<div class="container" id="mainbody"  style="display:none">
 <div class="row" >
 <div class="col-lg-3" id="nodeList">
 	<div class="panel panel-primary" v-for="(value, index) in nodeInfo">
@@ -149,7 +149,7 @@
 	<p v-if="value.version != 'Unkown'">版本：{{ value.version }}</p>
 	<p>容量：{{ value.size }}MByte</p>
 	<p>创建时间：{{ value.createTime }}</p>
-	<button class="btn btn-sm btn-primary" v-on:click="historyImage(index)">历史详情</btn>
+	<!-- <button class="btn btn-sm btn-primary" v-on:click="historyImage(index)">历史详情</btn> -->
 	<button class="btn btn-sm btn-danger" v-on:click="delImage(index)">删除</btn>
     </div>
 </div> <!-- panel -->

@@ -1,3 +1,5 @@
 dockerManager/db.sqlite3
 dockerManager/dockerManager/lib/conf.py
+dockerManager/nohup.out
+dockerManager/lib/conf.py
 *.pyc
