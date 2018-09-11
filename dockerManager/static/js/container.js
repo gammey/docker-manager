@@ -58,6 +58,30 @@ nodeV = new Vue({
 
 			})
 		},
+		getServiceDetails(index,refresh=true){
+			if (refresh == true){
+                                showV(vArr,serviceV);
+                        }
+			url = BASEAPI+"/docker/service/"+this.nodeInfo[index].name+"/";
+			axios.get(url)
+			.then(function(response){
+				serviceV.serviceInfo=[];
+				for (i in response.data.info)
+				{
+					var srv = {};
+					srv["name"] = response.data.info[i].Spec.Name;
+					srv["id"] = response.data.info[i]["ID"];
+					srv["replicas"] = response.data.info[i].Spec.Mode.Replicated.Replicas;
+					srv["labels"] = response.data.info[i].Spec.Labels["com.docker.stack.namespace"];
+					//console.log(response.data.info[i]);
+					serviceV.serviceInfo.push(srv);
+					serviceV.serviceInfo.sort(compare("labels"));
+				}
+			})
+			.catch(function(err){
+				console.log(err);
+			})
+		},
 		getContainersDetails(index,refresh=true){
 			if (refresh == true){
 				showV(vArr,containersV);

@@ -3,6 +3,7 @@
 <script src="http://cdn.static.runoob.com/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="http://cdn.static.runoob.com/libs/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="https://cdn.bootcss.com/vue/2.5.9/vue.min.js"></script>
+<script src="https://cdn.bootcss.com/axios/0.18.0/axios.js"></script>
 <meta charset="UTF-8">
 <style>
 .panel-body{
@@ -99,11 +100,13 @@
         	<p>接口地址：{{ value.url }}</p>
 		<p>接口版本：{{ value.version }}</p>
 		<p>状态: {{ value.status }}</p>
+		<p>角色: {{ value.role }}</p>
 		<div v-if="value.status == 'Running'">
 			<p>总容器数：{{ value.allContainers }}</p>
 			<p v-if="value.runningContainers !== 'UnKown'">运行容器数：{{ value.runningContainers }}</p>
 			<button class="btn btn-primary btn-sm" v-on:click="getContainersDetails(index)">容器</button>
 			<button class="btn btn-primary btn-sm" v-on:click="getImageDetails(index)">镜像</button>
+			<button v-if="value.role == 'Master'" v-on:click="getServiceDetails(index)" class="btn btn-primary btn-sm">服务(Services)</button>
 		</div>
     </div>
 	</div>
@@ -154,6 +157,21 @@
     </div>
 </div> <!-- panel -->
 </div> <!-- imagelist -->
+
+<div id="serviceList" v-if="seen">
+<div v-for="(value, index) in serviceInfo" class="panel panel-success">
+    <div class="panel-heading" data-toggle="collapse" v-bind:data-target="'#service' + value.id">
+        <h3 class="panel-title">
+            <big>Service</big>-{{ value.name }}
+        </h3>
+    </div>
+    <div class="panel-body collapse" v-bind:id="'service' + value.id">
+        <p>名称： {{ value.name }} </p>
+        <p>副本数： {{ value.replicas }} </p>
+        <p>Stack标签： {{ value.labels }} </p>
+    </div>
+</div> <!-- panel -->
+</div> <!-- imagelist -->
 </div> <!-- col-lg-9 -->
 </div>
 </div>
@@ -161,5 +179,6 @@
 </center>
 <script type="text/javascript" src="/static/js/container.js"></script>
 <script type="text/javascript" src="/static/js/image.js"></script>
+<script type="text/javascript" src="/static/js/service.js"></script>
 <script type="text/javascript" src="/static/js/init.js"></script>
 </body>

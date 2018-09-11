@@ -13,6 +13,10 @@ def nodelist(request):
 		nodeinfo['name']=i['name'];
 		nodeinfo['url']=i["url"];
 		nodeinfo['api-version']=i["version"];
+		if i.has_key("role"):
+			nodeinfo['role']=i["role"];
+		else:
+			nodeinfo["role"]="Normal Worker";
 		try:
 			nodeinfo["info"] = node.client.info();
 			nodeinfo["status"] = "Running";
@@ -56,7 +60,25 @@ def imagesDetailsList(request):
 	redict["info"] = node.listImages();
         redict["status"] = 0;
 	response = HttpResponse(json.dumps(redict));
-	return response;	
+	return response;
+
+def servicesDetailsList(request,nodename):
+	print nodename;
+	redict = {};
+	nodeSim = {};
+	for i in DockerList:
+                if i["name"] == nodename:
+                        nodeSim = i;
+        if nodeSim.has_key("name") == False:
+                redict["status"] = -1;
+                redict["info"] = "UnKown nodename."
+                return HttpResponse(json.dumps(redict));
+	node = gaDocker.dockerNode(nodeSim["url"],nodeSim["version"]);
+        redict["info"] = node.listServices();
+        redict["status"] = 0;
+        response = HttpResponse(json.dumps(redict));
+        return response;
+	
 def containerControl(request,nodename,containername,action):
 	redict = {};
 	node = gaDocker.searchNode(gaDocker.dockerlist,nodename);

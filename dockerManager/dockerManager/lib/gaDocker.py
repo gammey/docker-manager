@@ -70,6 +70,12 @@ class dockerNode:
 				hostpost = postcfg['HostIp']+":"+postcfg['HostPort'];
 				reList.append({i:hostpost});
 			return reList;
+	def listServices(self):
+		reList = [];
+		servicelist = self.client.services.list();
+		for i in servicelist:
+			reList.append(i.attrs);
+		return reList;
 	def listContainerSimple(self,status="all"):
 		reList=[];
 		for i in self.listContainers():
