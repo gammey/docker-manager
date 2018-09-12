@@ -162,13 +162,53 @@
 <div v-for="(value, index) in serviceInfo" class="panel panel-success">
     <div class="panel-heading" data-toggle="collapse" v-bind:data-target="'#service' + value.id">
         <h3 class="panel-title">
-            <big>Service</big>-{{ value.name }}
+            <big>Service-{{ value.labels }}</big>:{{ value.name }}
         </h3>
     </div>
     <div class="panel-body collapse" v-bind:id="'service' + value.id">
         <p>名称： {{ value.name }} </p>
         <p>副本数： {{ value.replicas }} </p>
+        <p>镜像： {{ value.image }} </p>
         <p>Stack标签： {{ value.labels }} </p>
+	<div class="btn-group">
+    		<button class="btn btn-primary btn-sm" data-toggle="modal" v-bind:data-target="'#service-expose' + value.id">端口详情 </button>
+    		<button class="btn btn-primary btn-sm" data-toggle="modal" v-bind:data-target="'#service-mounts' + value.id">挂载详情 </button>
+	</div>
+	<div class="modal fade" v-bind:id="'service-expose' + value.id" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					端口信息
+				</div>
+				<div class="modal-body" v-for="(value, index) in value.Expose">
+					<p>目标端口： {{ value.TargetPort }} </p>
+					<p>公开端口： {{ value.PublishedPort }} </p>
+					<p>协议： {{ value.Protocol }} </p>
+					<p>模式： {{ value.PublishMode }} </p>
+				</div>
+				<div class="modal-footer">
+                			<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+            			</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" v-bind:id="'service-mounts' + value.id" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                        <div class="modal-content">
+				<div class="modal-header">
+					挂载信息
+				</div>
+                                <div class="modal-body" v-for="(value, index) in value.mount">
+                                        <p>源路径（宿主机）： {{ value.Source }} </p>
+                                        <p>目标路径（容器内）： {{ value.Target }} </p>
+                                        <p>类型： {{ value.Type }} </p>
+                                </div>
+                                <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                </div>
+                        </div>
+                </div>
+        </div>
     </div>
 </div> <!-- panel -->
 </div> <!-- imagelist -->

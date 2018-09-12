@@ -69,11 +69,35 @@ nodeV = new Vue({
 				for (i in response.data.info)
 				{
 					var srv = {};
-					srv["name"] = response.data.info[i].Spec.Name;
-					srv["id"] = response.data.info[i]["ID"];
-					srv["replicas"] = response.data.info[i].Spec.Mode.Replicated.Replicas;
-					srv["labels"] = response.data.info[i].Spec.Labels["com.docker.stack.namespace"];
-					//console.log(response.data.info[i]);
+					var r = response.data.info[i]
+					console.log(r);
+					srv["name"] = r.Spec.Name;
+					srv["id"] = r["ID"];
+					srv["replicas"] = r.Spec.Mode.Replicated.Replicas;
+					srv["labels"] = r.Spec.Labels["com.docker.stack.namespace"];
+					srv["image"] = r.Spec.TaskTemplate.ContainerSpec.Image.split("@")[0];
+					srv["Expose"] = [];
+					for (j in r.Endpoint.Ports)
+					{
+						var rs = r.Endpoint.Ports[j];
+						var expose = {};
+						expose["TargetPort"] = rs["TargetPort"];
+						expose["PublishedPort"] = rs["PublishedPort"];
+						expose["Protocol"] = rs["Protocol"];
+						expose["PublishMode"] = rs["PublishMode"];
+						srv["Expose"].push(expose);
+					}
+					srv["mount"] = [];
+					for (j in r.Spec.TaskTemplate.ContainerSpec.Mounts)
+					{
+						var rm = r.Spec.TaskTemplate.ContainerSpec.Mounts[j];
+						var m = {};
+						m["Source"] = rm["Source"];
+						m["Target"] = rm["Target"];
+						m["Type"] = rm["Type"];
+						srv["mount"].push(m);
+					}
+					//console.log("Before Push srv"+srv["mount"]);
 					serviceV.serviceInfo.push(srv);
 					serviceV.serviceInfo.sort(compare("labels"));
 				}
@@ -81,6 +105,7 @@ nodeV = new Vue({
 			.catch(function(err){
 				console.log(err);
 			})
+			//console.log(serviceV.serviceInfo[0]);
 		},
 		getContainersDetails(index,refresh=true){
 			if (refresh == true){
