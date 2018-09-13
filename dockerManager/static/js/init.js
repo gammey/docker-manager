@@ -1,4 +1,11 @@
-        $.ajax({
+modalV = new Vue({
+	el: "#publicModal",
+	data:{
+		message: '',
+	}
+}) 
+
+       $.ajax({
                 url: BASEAPI+"/docker/list",
                 type:"POST",
                 success:function(resJSON){

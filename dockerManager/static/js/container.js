@@ -63,6 +63,7 @@ nodeV = new Vue({
                                 showV(vArr,serviceV);
                         }
 			url = BASEAPI+"/docker/service/"+this.nodeInfo[index].name+"/";
+			nodename = this.nodeInfo[index].name;
 			axios.get(url)
 			.then(function(response){
 				serviceV.serviceInfo=[];
@@ -71,6 +72,7 @@ nodeV = new Vue({
 					var srv = {};
 					var r = response.data.info[i]
 					console.log(r);
+					srv["managenode"] = nodename;
 					srv["name"] = r.Spec.Name;
 					srv["id"] = r["ID"];
 					srv["replicas"] = r.Spec.Mode.Replicated.Replicas;

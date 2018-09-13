@@ -142,3 +142,19 @@ def imageControl(request,nodename,imagename,action):
                 redict["info"]="Unkown Action";
 	response = HttpResponse(json.dumps(redict));
         return response;
+
+def updateReplicas(request,nodename,servicename,replicas):
+	node = gaDocker.searchNode(gaDocker.dockerlist,nodename);
+	redict = {};
+	if node == 0:
+		redict["status"]=-1;
+        	redict["info"]="Unkown Nodename";
+		return redict;
+	r = node.updateServiceReplicas(servicename,replicas);
+	if r == 0:
+		redict["status"]=0;
+                redict["info"]="Success";
+	else:
+		redict["status"]=-1;
+                redict["info"]="Failed";
+	return HttpResponse(json.dumps(redict));

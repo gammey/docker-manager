@@ -2,6 +2,7 @@
 import docker
 import json
 import conf
+from docker import types
 
 dockerlist = conf.DockerList
 
@@ -153,6 +154,16 @@ class dockerNode:
                         container.remove();
                 else:
                         return 0;
+	def updateServiceReplicas(self,servicename,replicas):
+		try:	
+			srv = self.client.services.get(servicename);
+		except:
+			return -1;
+		mode = types.ServiceMode(mode="replicated",replicas=int(replicas));
+		if srv.update(mode=mode) == True:
+			return 0
+		else:
+			return -1;
 
 def searchNode(nodelist,nodename):
         for i in nodelist:

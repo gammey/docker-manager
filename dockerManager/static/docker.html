@@ -171,9 +171,29 @@
         <p>镜像： {{ value.image }} </p>
         <p>Stack标签： {{ value.labels }} </p>
 	<div class="btn-group">
+    		<button class="btn btn-warning btn-sm" data-toggle="modal" v-bind:data-target="'#service-replicas' + value.id">修改副本数 </button>
     		<button class="btn btn-primary btn-sm" data-toggle="modal" v-bind:data-target="'#service-expose' + value.id">端口详情 </button>
     		<button class="btn btn-primary btn-sm" data-toggle="modal" v-bind:data-target="'#service-mounts' + value.id">挂载详情 </button>
 	</div>
+	<div class="modal fade" v-bind:id="'service-replicas' + value.id" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                        <div class="modal-content">
+                                <div class="modal-header">
+                                        修改副本：{{ value.name }}
+                                </div>
+                                <div class="modal-body">
+					<div class="from-group">
+						<label for="name">副本数</label>
+    						<input type="text" class="form-control" v-model="value.replicas">
+					</div>
+				</div>
+                                <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" data-dismiss="modal"  data-target="#publicModal" v-on:click="updateRplicas(index)">提交更改</button>
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                </div>
+                        </div>
+                </div>
+        </div>
 	<div class="modal fade" v-bind:id="'service-expose' + value.id" tabindex="-1" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
@@ -217,6 +237,19 @@
 </div>
 </div>
 </center>
+
+<div class="modal fade" id="publicModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                        <div class="modal-content">
+                                <div class="modal-body">
+					{{ message }}
+                                </div>
+                                <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                </div>
+                        </div>
+                </div>
+</div> 
 <script type="text/javascript" src="/static/js/container.js"></script>
 <script type="text/javascript" src="/static/js/image.js"></script>
 <script type="text/javascript" src="/static/js/service.js"></script>
