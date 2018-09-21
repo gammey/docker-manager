@@ -172,6 +172,7 @@
         <p>Stack标签： {{ value.labels }} </p>
 	<div class="btn-group">
     		<button class="btn btn-warning btn-sm" data-toggle="modal" v-bind:data-target="'#service-replicas' + value.id">修改副本数 </button>
+    		<button class="btn btn-warning btn-sm" data-toggle="modal" v-bind:data-target="'#service-upimages' + value.id">修改镜像</button>
     		<button class="btn btn-primary btn-sm" data-toggle="modal" v-bind:data-target="'#service-expose' + value.id">端口详情 </button>
     		<button class="btn btn-primary btn-sm" data-toggle="modal" v-bind:data-target="'#service-mounts' + value.id">挂载详情 </button>
 	</div>
@@ -225,6 +226,25 @@
                                 </div>
                                 <div class="modal-footer">
                                         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                                </div>
+                        </div>
+                </div>
+        </div>
+	<div class="modal fade" v-bind:id="'service-upimages' + value.id" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog">
+                        <div class="modal-content">
+                                <div class="modal-header">
+                                        现有镜像：{{ value.image }}
+                                </div>
+                                <div class="modal-body">
+                                	<div class="from-group">
+                                                <label for="name">镜像</label>
+                                                <input type="text" class="form-control" v-model="value.image">
+                                        </div>
+				</div>
+                                <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					<button type="button" class="btn btn-primary" data-toggle="modal" data-dismiss="modal"  data-target="#publicModal" v-on:click="updateImage(index)">提交更改</button>
                                 </div>
                         </div>
                 </div>

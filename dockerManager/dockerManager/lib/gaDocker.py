@@ -164,6 +164,15 @@ class dockerNode:
 			return 0
 		else:
 			return -1;
+	def updateServiceImage(self,servicename,image):
+		try:
+                        srv = self.client.services.get(servicename);
+                except:
+                        return -1;
+		if srv.update(image=image) == True:
+                        return 0
+                else:
+                        return -1;
 
 def searchNode(nodelist,nodename):
         for i in nodelist:

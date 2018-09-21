@@ -26,5 +26,6 @@ urlpatterns = [
     url(r'^container/(\S+)/(\S+)/(\S+)/$', docker_views.containerControl),
     url(r'^image/(\S+)/(\S+)/(\S+)/$', docker_views.imageControl),
     url(r'^service/update/(\S+)/(\S+)/replicas/(\d+)/$', docker_views.updateReplicas),
+    url(r'^service/update/(\S+)/(\S+)/images/(\S+)/$', docker_views.updateImages),
     url(r'^$', views.index),
 ]

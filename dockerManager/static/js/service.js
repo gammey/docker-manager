@@ -9,7 +9,7 @@ serviceV = new Vue({
 	methods:{
 		updateRplicas: function(index){
 			srv = this.serviceInfo[index];
-			console.log(this.serviceInfo[index].replicas);
+			//console.log(this.serviceInfo[index].replicas);
 			url = "/service/update/"+ srv.managenode+"/" + srv.name + "/replicas/" + srv.replicas + "/"
 			axios.get(url)
 			.then(function(response) {
@@ -18,7 +18,19 @@ serviceV = new Vue({
 			}).catch(function (error) {
     				console.log(error);
   			});
-		}	
+		},
+		updateImage: function(index)	{
+			srv = this.serviceInfo[index];
+			url = "/service/update/"+ srv.managenode+"/" + srv.name + "/images/" + srv.image + "/"
+			//console.log(encodeURI(url));
+			axios.get(url)
+			.then(function(response) {
+                                modalV.message = response.data;
+                                nodeV.getServiceDetails();
+                        }).catch(function (error) {
+                                console.log(error);
+                        });
+		}
 
 	}
 })

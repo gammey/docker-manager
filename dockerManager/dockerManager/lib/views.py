@@ -158,3 +158,19 @@ def updateReplicas(request,nodename,servicename,replicas):
 		redict["status"]=-1;
                 redict["info"]="Failed";
 	return HttpResponse(json.dumps(redict));
+
+def updateImages(request,nodename,servicename,image):
+	node = gaDocker.searchNode(gaDocker.dockerlist,nodename);
+        redict = {};
+        if node == 0:
+                redict["status"]=-1;
+                redict["info"]="Unkown Nodename";
+                return redict;
+        r = node.updateServiceImage(servicename,image);
+        if r == 0:
+                redict["status"]=0;
+                redict["info"]="Success";
+        else:
+                redict["status"]=-1;
+                redict["info"]="Failed";
+        return HttpResponse(json.dumps(redict));
