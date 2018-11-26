@@ -3,6 +3,7 @@ from conf import DockerList
 from django.http import HttpResponse
 import docker
 import gaDocker
+import gaSwarm
 import json
 
 def nodelist(request):
@@ -174,3 +175,7 @@ def updateImages(request,nodename,servicename,image):
                 redict["status"]=-1;
                 redict["info"]="Failed";
         return HttpResponse(json.dumps(redict));
+
+def swarmServicesProcessList(request,nodename):
+	swarm = gaSwarm.searchSwarmMaster(DockerList,nodename)
+	return HttpResponse(json.dumps(swarm.servicesDetails()));
