@@ -57,7 +57,13 @@ class dockerNode:
                         return 0;
                 else:   
                         redict["detail"] = container.attrs;
-			redict["stats"] = container.stats(decode=True,stream=False);
+			if container.attrs['State']['Status'] != 'running':
+                                redict["stats"] = {"memory_stats":{"usage":0}};
+                        else:
+                                try:
+                                        redict["stats"] = container.stats(decode=True,stream=False);
+                                except:
+                                        redict["stats"] = container.stats(decode=True,stream=True).next();
 			return redict;
 	def getContainerExposePorts(self,name):
 		container = self.searchContainer(name);
@@ -100,8 +106,14 @@ class dockerNode:
                         redict = {}
                         redict["name"] = i["name"];
                         redict["detail"] = self.getContainerDetail(i["name"]);
-                        node = self.searchContainer(i["name"])
-                        redict["stats"] = node.stats(decode=True,stream=False);
+                        container = self.searchContainer(i["name"])
+			if container.attrs['State']['Status'] != 'running':
+				redict["stats"] = {"memory_stats":{"usage":0}};
+			else:
+				try:
+                        		redict["stats"] = container.stats(decode=True,stream=False);
+				except:
+                        		redict["stats"] = container.stats(decode=True,stream=True).next();
                         relist.append(redict);
                 return relist;
 	def listImages(self):
