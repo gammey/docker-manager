@@ -14,18 +14,31 @@ class gaSwarm:
 		reList = [];
 		try:
 			nodelist = self.client.nodes.list();
-			for i in nodelist:
+		except AttributeError:
+			nodelist = self.client.nodes();
+		except docker.errors.APIError:
+			print("Client is not Swarm Master,");
+			return 0;
+		for i in nodelist:
+			try:
 				nodeAddr = i.attrs['Status']['Addr'];
+			except:
+				nodeAddr = i['Status']['Addr'];
+			if nodeAddr == "127.0.0.1":
+				for i in self.confList:
+					if i["name"] == "localhost":
+						client = docker.DockerClient(i["url"],i["version"]);
+                                       		redict = {"name":i["name"],"client":client}
+                                        	reList.append(redict);
+						break;
+			else:
 				for i in self.confList:
 					if nodeAddr == i["url"].split("/")[2].split(":")[0]:
 						client = docker.DockerClient(i["url"],i["version"]);
 						redict = {"name":i["name"],"client":client}
 						reList.append(redict);
 						break;
-			return reList;
-		except docker.errors.APIError:
-			print("Client is not Swarm Master,");
-			return 0;
+		return reList;
 	def containerList(self):
 		reList = [];
 		for i in self.nodeClientList():
