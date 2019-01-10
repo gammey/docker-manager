@@ -134,7 +134,7 @@
 			<button class="btn btn-success" v-bind:class="{ disabled: value.startDisable }" v-on:click="containerAction(index,'start')">启动</button>
 			<button class="btn btn-primary" v-bind:class="{ disabled: value.stopDisable }" v-on:click="containerAction(index,'stop')">停止</button>
 			<button class="btn btn-warning" v-bind:class="{ disabled: value.restartDisable }" v-on:click="containerAction(index,'restart')">重启</button>
-			<button class="btn btn-danger" v-bind:class="{ disabled: value.delDisable }" v-on:click="containerAction(index,'remove')">删除</button>
+			<button class="btn btn-danger" v-bind:class="{ disabled: value.delDisable }" data-toggle="modal" data-target="#publicModal" v-on:click="containerAction(index,'remove')">删除</button>
 		</div>
 			<button class="btn btn-default" v-on:click="containerRefresh(index)">刷新</button>
     </div>
@@ -153,7 +153,7 @@
 	<p>容量：{{ value.size }}MByte</p>
 	<p>创建时间：{{ value.createTime }}</p>
 	<!-- <button class="btn btn-sm btn-primary" v-on:click="historyImage(index)">历史详情</btn> -->
-	<button class="btn btn-sm btn-danger" v-on:click="delImage(index)">删除</btn>
+	<button class="btn btn-sm btn-danger" v-on:click="delImage(index)" data-toggle="modal" data-target="#publicModal">删除</btn>
     </div>
 </div> <!-- panel -->
 </div> <!-- imagelist -->

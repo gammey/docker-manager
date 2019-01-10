@@ -182,7 +182,11 @@ containersV = new Vue({
 				type:"POST",
 				success:function(resJSON){
 					containersV.containerRefresh(index);
-					stopload();	
+					if(action == "remove"){
+						containersV.containersInfo.splice(index,1);
+					}
+					stopload();
+					modalV.message = "删除成功";
 				}
 			})
 		},
