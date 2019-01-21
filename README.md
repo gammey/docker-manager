@@ -46,12 +46,14 @@ Server:
 git clone https://github.com/gammey/docker-manager.git
 5.简单配置
 
-编辑git目录下/dockerManager/dockerManager/lib/conf.py文件，按照API地址和之前查看的api版本进行填写，可以填写多个地址（注意，由于使用docker运行，请勿填写127.0.0.1或localhost）。
+根据/dockerManager/dockerManager/下的docker.ini-sample创建docker.ini文件配置节点
 
-DockerList=[
-        {"name":"localhost","url":"http://192.168.1.21:2375/","version":"1.26"},
-        {"name":"node2","url":"http://[url2]:[port2]/","version":"[version2]"},
-]
+例如：
+[swarm-docker-admin]	#节点名称
+name=swarm-docker-admin #节点名称
+url=http://192.168.1.240:2375/  #docker API地址
+version=1.26	#dockerAPI版本
+role=Master	#如果是docker swarm mode的管理节点，设置成Master
 6.进行发布
 
 回到git的根目录执行bash install.sh;

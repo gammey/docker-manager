@@ -1,0 +1,6 @@
+[localhost]
+name=localhost				#hostname of docker node
+url=http://192.168.5.203:2375/		#url of docker api
+version=1.25				#version of docker api
+role=Master				#if node is docker swarm mode master,set master
+

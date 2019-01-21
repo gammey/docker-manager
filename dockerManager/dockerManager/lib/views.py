@@ -176,6 +176,6 @@ def updateImages(request,nodename,servicename,image):
                 redict["info"]="Failed";
         return HttpResponse(json.dumps(redict));
 
-def swarmServicesProcessList(request,nodename):
-	swarm = gaSwarm.searchSwarmMaster(DockerList,nodename)
+def swarmServicesProcessList(request,masterNodeName):
+	swarm = gaSwarm.searchSwarmMaster(DockerList,masterNodeName)
 	return HttpResponse(json.dumps(swarm.servicesDetails()));
