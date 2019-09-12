@@ -172,10 +172,13 @@ class dockerNode:
 		except:
 			return -1;
 		mode = types.ServiceMode(mode="replicated",replicas=int(replicas));
-		if srv.update(mode=mode) == True:
-			return 0
-		else:
-			return -1;
+		ans = srv.update(mode=mode)
+                if ans == True:
+                        return 0
+                elif ans["Warnings"] == None:
+                        return 0;
+                else:
+                        return -1;
 	def updateServiceImage(self,servicename,image):
 		try:
                         srv = self.client.services.get(servicename);
