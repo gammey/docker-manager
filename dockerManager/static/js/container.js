@@ -124,6 +124,7 @@ nodeV = new Vue({
 				success:function(resJson){
 					res = JSON.parse(resJson)["info"];
 					containersV.containersInfo=[];
+					if(res.length > 0){ 
 					for (i in res){
 						var container = {};
 						container["name"]=res[i]["name"];
@@ -155,6 +156,9 @@ nodeV = new Vue({
 						container["mempercent"]=(res[i]["stats"]["memory_stats"]["usage"]/res[i]["stats"]["memory_stats"]["limit"]*100).toFixed(2);
 						containersV.containersInfo.push(container);
 						stopload()
+					}}
+					else{
+						stopload();
 					}
 				}
 			})
